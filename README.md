@@ -5,7 +5,7 @@ Development marketplace for the hustle-plugin Claude Code extension.
 ## Structure
 
 ```
-hustle-marketplace/
+hustler-marketplace/
 ├── .claude-plugin/
 │   └── marketplace.json         # Marketplace configuration
 └── hustle-plugin/               # The plugin itself
