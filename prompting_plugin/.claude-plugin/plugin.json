@@ -11,5 +11,6 @@
   "repository": "https://github.com/bcasci/hustler-marketplace",
   "license": "MIT",
   "keywords": ["prompting", "prompt-engineering", "prompt-analysis"],
+  "commands": "./commands/",
   "skills": "./skills/"
 }

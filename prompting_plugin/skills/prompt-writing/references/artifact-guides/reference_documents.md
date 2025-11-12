@@ -6,23 +6,9 @@ Reference documents provide context that helps Claude Code understand projects. 
 
 ## File Reference Strategies
 
-**Plain Path (Default Approach):**
+**In reference documents:**
 
-- Syntax: path/to/file.md (no @)
-- Behavior: Claude reads the file only if it determines it's valuable
-- Default for: Reference documents, documentation pointers, optional resources
-- Benefit: No context cost unless actually needed
-
-**@ Symbol (Explicit Import):**
-
-- Syntax: @path/to/file.md
-- Behavior: Forces immediate load of entire file content into context
-- Use only when: The file content must be available right now for the current task
-- Cost: Immediate context window consumption
-
-## When to Use Each Reference Type
-
-**Use plain paths (the default):**
+Use plain paths (the default):
 
 - In reference documents pointing to other docs
 - Troubleshooting guides that are conditionally relevant
@@ -30,14 +16,7 @@ Reference documents provide context that helps Claude Code understand projects. 
 - Any "available if needed" reference
 - When you want Claude to decide based on the actual task
 
-**Use @ (rarely):**
-
-- Interactive prompts when working directly with a specific file ("Review @src/auth.js")
-- Current task explicitly requires this exact file content now
-- Small, critical files that must be in context immediately
-
-**In reference documents: Almost always use plain paths**
-Reference docs should point to resources, not force-load them. Let Claude decide what it needs based on the task at hand.
+Avoid @ in reference docs - it force-loads content unnecessarily.
 
 ## Providing Context with Plain Paths
 
@@ -53,15 +32,11 @@ When using plain paths in reference documents, explain when the file is relevant
 "@docs/troubleshooting.md" (forces load unnecessarily)
 "docs/file1.md, docs/file2.md, docs/file3.md" (just a list with no guidance)
 
-## Progressive Disclosure Pattern
+## Progressive Disclosure
 
-For complex topics, recommend organizing with overview first and details in XML-tagged sections.
+For complex reference docs, use progressive disclosure: overview first, details in XML-tagged sections.
 
-Pattern: High-level explanation accessible immediately, detailed content wrapped in semantic XML tags that Claude references when needed.
-
-Why: Prevents context window bloat while keeping information available.
-
-Example structure: Overview paragraph explaining the system, then authentication_details section with implementation specifics, payment_processing section with flow details, error_handling section with troubleshooting steps.
+Example: Overview paragraph explaining the system, then `<authentication_details>`, `<payment_processing>`, `<error_handling>` sections with specifics.
 
 ## What Makes Effective Reference Documents
 
@@ -99,11 +74,11 @@ Example structure: Overview paragraph explaining the system, then authentication
 
 When generating a prompt that asks Claude Code to create or improve a reference document, include guidance on:
 
-**Structure:** Overview first, details organized logically, use progressive disclosure for complex topics
+**Structure:** Overview first, details organized logically, progressive disclosure for complex topics
 
-**Content Selection:** Focus on non-obvious information, explain the "why" not just "what", use plain paths to point to detailed docs
+**Content Selection:** Focus on non-obvious information, explain the "why" not just "what"
 
-**References:** Default to plain paths with context about when files are relevant, use @ only when file content must be immediately available
+**References:** Plain paths with context about when files are relevant
 
 **Brevity:** Make every sentence count, remove redundancy, assume Claude knows common concepts
 

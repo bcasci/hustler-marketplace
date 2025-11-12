@@ -30,19 +30,18 @@ Unique identifier. Use lowercase with hyphens.
 **description (required):**
 Critical field that determines when Claude invokes the subagent. Must include:
 
-- What the subagent does
-- When it should be used
-- What context it needs to start
-- How to intentionally trigger it
+1. What the subagent does
+2. When it should be used (include "USE PROACTIVELY" or "MUST BE USED" for automatic invocation)
+3. What context it needs to start
+4. How to trigger it (specific invocation phrases)
 
-Good: "Expert code reviewer. Use PROACTIVELY after code changes to check security, style, and maintainability. Reviews git diffs and provides prioritized feedback."
+Good: "Expert code reviewer. USE PROACTIVELY after code changes to check security, style, and maintainability. Reviews git diffs and provides prioritized feedback."
 
-Poor: "Reviews code" (too vague, no trigger conditions)
+Poor: "Reviews code" (too vague, no trigger conditions, no proactive signal)
 
 **tools (optional):**
 Comma-separated list. Omit to inherit all tools from main thread.
 Common: Read, Write, Edit, Bash, Glob, Grep, WebSearch, WebFetch
-Can include MCP tools when relevant (check available MCPs)
 Principle: Grant only necessary tools.
 
 **model (optional):**

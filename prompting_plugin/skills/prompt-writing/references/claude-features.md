@@ -1,11 +1,36 @@
-<claude_md_awareness>
-Many projects have domain-specific CLAUDE.md files containing core behaviors, domain knowledge, patterns, and conventions.
+## Universal Features Available in All Prompts
 
+These features are available in ALL prompt contexts (skills, commands, subagents, reference docs, free-form).
+
+**CLAUDE.md Files:**
+Claude automatically loads CLAUDE.md files from current folder and up the directory tree. To use in prompts, reference explicitly when relevant: "Following the patterns in CLAUDE.md..." or "Check CLAUDE.md for project conventions."
+
+**MCP Tools:**
+Available in any prompt context. Include in allowed-tools/tools fields: `allowed-tools: "Read, mcp__server__tool"`. Invoke explicitly when needed: "use your [mcp-server] to..."
+
+**Skills:**
+Any prompt can invoke skills: "use your [skill-name] skill to..." Skills are auto-discovered but explicit invocation ensures activation.
+
+**Subagents:**
+Any prompt can delegate to subagents: "use your [subagent-name] subagent to..." Available from any context.
+
+**Progressive Disclosure:**
+Use XML tags to organize complex content Claude references as needed. Reduces initial context load. Pattern: overview first, details in `<section_name>` tags.
+
+**File References:**
+- Plain path (`docs/file.md`): Claude reads if relevant
+- @ symbol (`@docs/file.md`): Force-loads into context immediately
+
+---
+
+## Self-Reflection When Generating Prompts
+
+<claude_md_awareness>
 **When generating prompts:**
 
 - If the prompt relates to established knowledge → leverage existing reference files (CLAUDE.md, project docs)
 - If repeated patterns emerge → recommend storing in appropriate reference files
-  </claude_md_awareness>
+</claude_md_awareness>
 
 <mcp_servers>
 **Self-Reflection on Available MCP Servers**
