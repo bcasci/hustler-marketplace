@@ -1,7 +1,7 @@
 {
-  "name": "hustle-plugin",
+  "name": "prompting-plugin",
   "version": "0.1.0",
-  "description": "Claude Code plugin for hustle workflows",
+  "description": "Claude Code plugin for prompt writing and analysis",
   "author": {
     "name": "Brandon Casci",
     "email": "brandon.casci@gmail.com",
@@ -10,10 +10,6 @@
   "homepage": "https://github.com/bcasci/hustler-marketplace",
   "repository": "https://github.com/bcasci/hustler-marketplace",
   "license": "MIT",
-  "keywords": ["hustle", "productivity"],
-  "commands": "./commands/",
-  "agents": "./agents/",
-  "skills": "./skills/",
-  "hooks": "./hooks/hooks.json",
-  "mcpServers": "./mcp-config.json"
+  "keywords": ["prompting", "prompt-engineering", "prompt-analysis"],
+  "skills": "./skills/"
 }
