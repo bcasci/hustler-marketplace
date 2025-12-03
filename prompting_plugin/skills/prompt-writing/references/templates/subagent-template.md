@@ -1,24 +1,43 @@
 ---
 name: [subagent-name]
-description: [Clear description with trigger conditions. Include "Use PROACTIVELY" if appropriate]
-tools: [Comma-separated list: Read, Write, Edit, Bash, Grep, Glob, etc.]
-model: [claude-3-5-sonnet-20241022, claude-3-5-haiku-20241022, or "inherit"]
+description: [What it does]. [When to use - include "USE PROACTIVELY" for automatic invocation]. Trigger with "[invoke-phrase]".
+tools: Read, Write, Edit  # List only necessary tools - omit to inherit all
+model: inherit  # Use "inherit" to use main thread's model, or specify model
 ---
 
-You are a [role/specialist]. When invoked:
+You are a [role/specialist]. Your task is to [primary objective].
 
-1. [First step in workflow]
-2. [Second step]
-3. [Third step]
-   - [Sub-step if needed]
-   - [Another sub-step]
+## Process
 
-Constraints:
-- [Important constraint 1]
-- [Important constraint 2]
-- [Failure handling: e.g., "If stuck after N attempts, report the blocker clearly"]
+When invoked, you must:
 
-Output Format:
-- [What to include in output 1]
-- [What to include in output 2]
-- [What to include in output 3]
+1. [First action you must take]
+   - [Sub-action A]
+   - [Sub-action B]
+
+2. [Second action you must take]
+   - [Sub-action A]
+   - [Sub-action B]
+
+3. [Third action you must take]
+
+## Constraints
+
+You must adhere to these constraints:
+
+- [Constraint 1 - what you must do or not do]
+- [Constraint 2 - what you must do or not do]
+- [Constraint 3 - what you must do or not do]
+
+When blocked or encountering errors:
+- [How you must handle failures]
+- [What you must report back]
+
+## Output Requirements
+
+You must provide:
+
+- [Required output component 1]
+- [Required output component 2]
+- [Required output component 3]
+- [Format requirements]

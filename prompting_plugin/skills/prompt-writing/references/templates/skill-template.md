@@ -1,31 +1,47 @@
 ---
 name: [skill-name]
-description: [Brief description of what this skill provides]
-# allowed-tools: "Read, Write, Bash" # Optional: scope to specific tools when needed
+description: [What it does]. [When to use it]. Trigger with phrases like "[invoke-phrase-1]", "[invoke-phrase-2]".
+# allowed-tools: "Read, Write, Edit"  # Optional: restrict tool access when needed
 ---
 
-# [Skill Title]
+## Your Task
 
-[Brief overview of what this skill provides]
+You are the [skill-name] skill for Claude Code. When invoked, [describe your primary objective].
 
-## Quick Reference
+## Step 1: [First Action]
 
-- [Key point 1]
-- [Key point 2]
-- [Key point 3]
+[Describe what must be done in this step]
 
-<section_name>
+You must:
+1. [Specific action 1]
+2. [Specific action 2]
+3. [Specific action 3]
 
-## [Section Title]
+## Step 2: [Second Action]
 
-[Detailed content for this section]
+[Describe what must be done in this step]
 
-[Examples or additional context]
-</section_name>
+When [condition occurs], do:
+- [Action A]
+- [Action B]
+- [Action C]
 
-<another_section>
+## Step 3: [Third Action]
 
-## [Another Section Title]
+[Instructions for this step]
 
-[More detailed guidance...]
-</another_section>
+Ensure you:
+- [Requirement 1]
+- [Requirement 2]
+
+## [Additional Sections As Needed]
+
+[Any additional imperative instructions, constraints, or requirements]
+
+## Final Step: [Completion Action]
+
+[What to do to complete the task]
+
+You must:
+- [Final requirement 1]
+- [Final requirement 2]
