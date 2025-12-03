@@ -4,7 +4,9 @@ argument-hint: [filepath-or-prompt-text] [additional-instructions]
 allowed-tools: "Read, Write, Glob, Skill(prompt-writing)"
 ---
 
-Optimize a prompt using your prompt-writing skill.
+# optimize-prompt
+
+You must invoke Skill(prompt-writing) to optimize the prompt in $1.
 
 **Mode detection:**
 
@@ -17,16 +19,7 @@ Recognize file paths by their structure (e.g., is only `/path/to/file[.XXX]`):
 
 1. Read the file
 2. Extract additional instructions from remaining arguments
-3. Invoke prompt-writing skill with:
-
-   "Optimize the prompt in:
-
-   <prompt_to_optimize>
-   [file contents]
-   </prompt_to_optimize>
-
-   Additional context: [instructions if provided]"
-
+3. You must optimize the prompt by invoke your skill along with additional instructions in $2 if $2 is present
 4. Write optimized prompt back to original path
 5. Report changes and reasoning
 
