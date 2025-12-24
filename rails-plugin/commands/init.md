@@ -44,20 +44,48 @@ echo "✓ Destination: $DEST"
 
 ## Step 2: Detect Project Dependencies
 
-Build list of available dependencies:
+Build list of available dependencies from multiple sources:
 
 ```bash
 # Gems from Gemfile.lock
 GEMS=$(grep "^    " Gemfile.lock 2>/dev/null | awk '{print $1}' | sort)
 
-# JS packages from importmap
-JS_PACKAGES=$(grep 'pin "' config/importmap.rb 2>/dev/null | awk -F'"' '{print $2}')
-
 # Database adapter
 DB_ADAPTER=$(grep "adapter:" config/database.yml 2>/dev/null | head -1 | awk '{print $2}')
 ```
 
-Combine into single dependency list (case-insensitive matching).
+**Detect JS/UI libraries from multiple sources:**
+
+1. **Importmap** - `config/importmap.rb`:
+
+   ```bash
+   grep 'pin "' config/importmap.rb 2>/dev/null | awk -F'"' '{print $2}'
+   ```
+
+2. **CDN links in views** - Check layout and view files for CDN references:
+
+   ```bash
+   grep -rh "cdn\|unpkg\|jsdelivr" app/views/ 2>/dev/null | grep -oE "(beercss|tailwind|bootstrap|alpinejs|htmx)" | sort -u
+   ```
+
+3. **Vendor assets** - Rails asset pipeline locations:
+
+   ```bash
+   # Check vendor/javascript and vendor/assets
+   find vendor/javascript vendor/assets -type f 2>/dev/null | grep -oE "(beercss|turbo|stimulus)" | sort -u
+
+   # Check app/assets for downloaded libraries
+   find app/assets/javascripts app/assets/stylesheets -type f 2>/dev/null | grep -oE "(beercss|tailwind|bootstrap)" | sort -u
+   ```
+
+4. **Package managers** - Check for other JS dependency managers:
+
+   ```bash
+   # package.json (if using Node)
+   grep -E '"(dependencies|devDependencies)"' package.json 2>/dev/null | grep -oE "(beercss|turbo|stimulus)" | sort -u
+   ```
+
+Combine all sources into single dependency list (case-insensitive matching). Deduplicate entries.
 
 ---
 
