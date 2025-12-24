@@ -1,0 +1,16 @@
+<%# Form Pattern: Minimal Simple Form markup %>
+<%# CRITICAL: NO wrapper divs around inputs - Simple Form generates them %>
+<%# CRITICAL: Labels/placeholders from i18n (config/locales/simple_form.en.yml) %>
+<%# Adapt: Change model and attributes %>
+
+<%= simple_form_for([:manage, album]) do |f| %>
+  <%= f.input :name %>
+  <%= f.input :description %>
+  <%= f.input :release_date, as: :string,
+              input_html: { type: 'date' } %>
+  <%= f.button :submit %>
+<% end %>
+
+<%# Custom inputs (check app/inputs/ first): %>
+<%# f.input :cover_image, as: :image_upload %>
+<%# f.input :tags, as: :tag_select %>

@@ -1,0 +1,36 @@
+<%# Dialog/Modal Pattern: Stimulus dialog controller %>
+<%# Wrap page in data-controller="dialog" %>
+
+<%# INDEX PAGE %>
+<section data-controller="dialog">
+  <nav>
+    <h6>Products</h6>
+    <div class="max"></div>
+    <button data-action="dialog#toggle" class="primary small-round">
+      <i>add</i>
+      <span>Add</span>
+    </button>
+  </nav>
+
+  <div id="content_container">
+    <%= render 'list' %>
+  </div>
+
+  <%= render 'modal' %>
+</section>
+
+<%# _MODAL.HTML.ERB PARTIAL %>
+<dialog data-dialog-target="dialog" class="modal large right">
+  <header class="fixed front">
+    <nav>
+      <h5 class="max">Dialog Title</h5>
+      <button class="circle transparent" data-action="dialog#toggle">
+        <i>close</i>
+      </button>
+    </nav>
+  </header>
+
+  <article>
+    <%= render 'form' %>
+  </article>
+</dialog>

@@ -1,0 +1,22 @@
+<%# Nav Header Pattern: Title + spacer + actions %>
+
+<%# Simple header with add button %>
+<nav class="bottom-margin">
+  <h6><%= Model.model_name.human(count: 2) %></h6>
+  <div class="max"></div>
+  <%= link_to path, class: 'button primary small-round',
+              data: { turbo_frame: :_top } do %>
+    <i>add</i>
+    <span><%= t('buttons.add') %></span>
+  <% end %>
+</nav>
+
+<%# Header with edit + delete actions %>
+<nav>
+  <%= link_to 'Edit', edit_path, class: 'button small-round' %>
+  <%= button_to 'Delete', path, method: :delete,
+      data: { turbo_confirm: "Are you sure?" },
+      class: 'button red-text border left-margin small-round' %>
+</nav>
+
+<%# KEY: <div class="max"></div> pushes buttons to right %>

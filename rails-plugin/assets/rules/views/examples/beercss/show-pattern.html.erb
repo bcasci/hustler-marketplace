@@ -1,0 +1,40 @@
+<%# Show Page Pattern: Detail page with lazy sections %>
+<%# Adapt: Change album to your model, adjust paths and attributes %>
+
+<article class="no-padding no-elevate">
+  <%= turbo_stream_from LiveUpdates::Subscribe.to_manage_album(@album) %>
+
+  <div class="grid no-space">
+    <div class="s12 m9">
+      <div class="padding">
+        <h6><%= @album.metadata_artist_name %></h6>
+        <h4><%= @album.name %></h4>
+        <p><%= @album.description %></p>
+        <nav>
+          <%= link_to 'Edit', edit_path, class: 'button small-round' %>
+          <%= button_to 'Delete', path, method: :delete,
+              data: { turbo_confirm: "Are you sure?" },
+              class: 'button red-text border left-margin small-round' %>
+        </nav>
+      </div>
+    </div>
+    <div class="s12 m3">
+      <%= render partial: 'manage/shared/product_image',
+                 locals: { product: @album } %>
+    </div>
+  </div>
+</article>
+
+<div class="grid">
+  <div class="s12 m12">
+    <%= turbo_frame_tag 'related_content', src: related_path do %>
+      <div class="fill medium-height middle-align center-align"></div>
+    <% end %>
+  </div>
+</div>
+
+<%= link_to public_path,
+    class: 'small-margin fixed bottom right circle secondary' do %>
+  <i>link</i>
+  <div class="tooltip left">Public page</div>
+<% end %>

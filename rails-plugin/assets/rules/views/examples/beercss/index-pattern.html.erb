@@ -1,0 +1,20 @@
+<%# Index Page Pattern: Collection list with CRUD %>
+<%# Adapt: Change Album to your model, adjust paths %>
+
+<%= turbo_frame_tag "#{Album.model_name.plural}_frame" do %>
+  <article id="album_list" class="no-elevate card surface-container-high">
+    <nav class="bottom-margin">
+      <h6><%= Album.model_name.human(count: 2) %></h6>
+      <div class="max"></div>
+      <%= link_to new_manage_album_path,
+          class: 'button primary small-round',
+          data: { turbo_frame: :_top } do %>
+        <i>add</i>
+        <span><%= t('buttons.add') %></span>
+      <% end %>
+    </nav>
+    <%= render @albums %>
+    <%= render partial: 'manage/shared/empty_state',
+               locals: { resource: Album } if @albums.empty? %>
+  </article>
+<% end %>

@@ -1,0 +1,20 @@
+<%# Turbo Frame Lazy Loading Pattern %>
+<%# Frame with src attribute loads on render %>
+<%# Frame IDs must match exactly between trigger and target %>
+
+<%# TRIGGER PAGE - Embeds frame with src %>
+<%= turbo_frame_tag dom_id(@album, 'tracks'),
+                    src: manage_album_tracks_path(@album) do %>
+  <div class="fill medium-height middle-align center-align"></div>
+<% end %>
+
+<%# TARGET PAGE (manage/album_tracks/index.html.erb) %>
+<%# Must wrap response in matching frame ID %>
+<%= turbo_frame_tag dom_id(@album, 'tracks') do %>
+  <article class="no-elevate card">
+    <nav>
+      <h6>Tracks</h6>
+      <%# content %>
+    </nav>
+  </article>
+<% end %>

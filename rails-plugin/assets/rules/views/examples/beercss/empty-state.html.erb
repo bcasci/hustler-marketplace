@@ -1,0 +1,25 @@
+<%# Empty State Pattern: Use shared partial with resource %>
+
+<%# Simple - uses resource's i18n empty_state attributes %>
+<%= render partial: 'manage/shared/empty_state',
+           locals: { resource: Album } %>
+
+<%# Custom - build EmptyState object in controller %>
+<%# @empty_state = EmptyState.new(
+      icon: 'label_off',
+      title: 'No items yet',
+      description: 'Add your first item to get started',
+      action_label: 'Add Item',
+      action_url: new_item_path,
+      action_class: 'button small-round'
+    )
+%>
+<%= render partial: 'shared/empty_state/base',
+           locals: { empty_state: @empty_state } %>
+
+<%# Common icons:
+  - label_off (tags/labels)
+  - inbox (general empty)
+  - music_off (music/tracks)
+  - folder_off (files/folders)
+%>

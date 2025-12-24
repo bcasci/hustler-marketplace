@@ -1,0 +1,33 @@
+<%# Turbo Stream Multi-Action Pattern %>
+<%# One .turbo_stream.erb file with multiple coordinated updates %>
+<%# CRITICAL: Render partials, don't duplicate markup %>
+
+<%# create.turbo_stream.erb example %>
+
+<%# 1. Add new item to list %>
+<%= turbo_stream.prepend "albums_list" do %>
+  <%= render @album %>
+<% end %>
+
+<%# 2. Update count %>
+<%= turbo_stream.update "album_count" do %>
+  <%= @albums.count %>
+<% end %>
+
+<%# 3. Remove empty state (if first item) %>
+<%= turbo_stream.remove 'albums_empty_state' %>
+
+<%# 4. Close dialog (if opened from modal) %>
+<%= turbo_stream.update 'dialog-album' do %>
+  <script>
+    document.getElementById('dialog-album').close();
+  </script>
+<% end %>
+
+<%# Common actions:
+  - prepend: Add to beginning
+  - append: Add to end
+  - update: Replace content (keeps wrapper)
+  - replace: Replace entire element
+  - remove: Delete element
+%>

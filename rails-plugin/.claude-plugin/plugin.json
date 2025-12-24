@@ -1,0 +1,15 @@
+{
+  "name": "hustler-rails",
+  "version": "0.1.0",
+  "description": "Ruby on Rails development tools and best practices for Claude Code, the hustler way.",
+  "author": {
+    "name": "Brandon Casci"
+  },
+  "homepage": "https://github.com/your-username/hustle-marketplace",
+  "repository": "https://github.com/your-username/hustle-marketplace",
+  "license": "MIT",
+  "keywords": ["ruby", "rails", "ruby-on-rails", "mvc", "web-development"],
+  "commands": "./commands/",
+  "skills": "./skills/",
+  "hooks": "./hooks/hooks.json"
+}

@@ -13,6 +13,11 @@
       "name": "prompting",
       "source": "./prompting_plugin",
       "description": "Prompt writing and analysis skill using real, documented techniques"
+    },
+    {
+      "name": "hustler-rails",
+      "source": "./rails-plugin",
+      "description": "Ruby on Rails development tools and best practices"
     }
   ]
 }
