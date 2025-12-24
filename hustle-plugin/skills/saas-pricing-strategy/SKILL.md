@@ -133,19 +133,23 @@ Ask these questions:
 ### Page Structure
 
 1. **Lead with value, not features**
+
    - Wrong: "Unlimited clients, 5GB storage, custom fields"
    - Right: "Save 10 hours per week on reporting"
 
 2. **Show annual savings option**
+
    - Offer 2 months free for annual billing (17% discount)
    - Improves cash flow and reduces churn
 
 3. **Transparent tier comparison**
+
    - Feature comparison table with clear differentiators
    - Use checkmarks, not excessive text
    - Highlight recommended tier
 
 4. **Social proof by tier**
+
    - Include customer counts, testimonials, use case examples per tier
    - "Perfect for teams of 5-10" or "Used by 500+ companies like yours"
 
@@ -289,18 +293,21 @@ If yes to all five, proceed with experiment. If no to any, revisit approach.
 When asked to help with pricing:
 
 1. **Understand the context**
+
    - What does the product do?
    - Who are the customers?
    - What competitors exist and how do they price?
    - What constraints exist (market, budget, positioning)?
 
 2. **Apply the frameworks**
+
    - Recommend value metric using decision framework
    - Suggest tier structure (3-4 tiers)
    - Position against competition using Priestley's demand principles
    - Apply Campbell's value-based approach
 
 3. **Deliverable options**
+
    - Pricing strategy document
    - Pricing page copy
    - Competitive analysis
