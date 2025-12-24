@@ -1,6 +1,6 @@
 ---
 paths: config/database.yml, db/**/*.rb
-dependencies: [sqlite]
+dependencies: [sqlite3]
 ---
 
 # SQLite Multi-Database Setup

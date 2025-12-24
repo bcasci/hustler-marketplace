@@ -1,6 +1,6 @@
 ---
 paths: db/**/*.{rb,sql}
-dependencies: [sqlite]
+dependencies: [sqlite3]
 ---
 
 # SQLite FTS5 Full-Text Search

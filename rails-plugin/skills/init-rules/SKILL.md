@@ -7,57 +7,37 @@ description: Initialize Rails coding conventions for a project by detecting depe
 
 You are the init-rules skill for the hustler-rails plugin. When invoked, copy Rails coding conventions from the plugin to the user's project, filtering by detected dependencies.
 
-## Step 1: Set Paths
+## Step 1: Detect Project Dependencies
 
-Set source and destination paths:
-
-```bash
-SRC="{baseDir}/assets/rules"
-DEST="${CLAUDE_PROJECT_DIR:-$PWD}/.claude/rules/hustler-rails"
-
-echo "✓ Source: $SRC"
-echo "✓ Destination: $DEST"
-```
-
-## Step 2: Detect Project Dependencies
-
-Build dependency list from multiple sources:
+Build comprehensive dependency list:
 
 ```bash
 # Gems from Gemfile.lock
-GEMS=$(grep "^    " Gemfile.lock 2>/dev/null | awk '{print $1}' | sort)
+grep "^    " Gemfile.lock 2>/dev/null | awk '{print $1}' | sort
 
 # Database adapter
-DB_ADAPTER=$(grep "adapter:" config/database.yml 2>/dev/null | head -1 | awk '{print $2}')
+grep "adapter:" config/database.yml 2>/dev/null | head -1 | awk '{print $2}'
 
 # JS/UI from importmap
-JS_IMPORTMAP=$(grep 'pin "' config/importmap.rb 2>/dev/null | awk -F'"' '{print $2}')
+grep 'pin "' config/importmap.rb 2>/dev/null | awk -F'"' '{print $2}'
 
 # JS/UI from CDN links in views
-JS_CDN=$(grep -rh "cdn\|unpkg\|jsdelivr" app/views/ 2>/dev/null | grep -oE "(beercss|tailwind|bootstrap|alpinejs|htmx)" | sort -u)
+grep -rh "cdn\|unpkg\|jsdelivr" app/views/ 2>/dev/null | grep -oE "(beercss|tailwind|bootstrap|alpinejs|htmx)" | sort -u
 
 # JS/UI from vendor assets
-JS_VENDOR=$(find vendor/javascript vendor/assets app/assets/javascripts app/assets/stylesheets -type f 2>/dev/null | grep -oE "(beercss|turbo|stimulus|tailwind|bootstrap)" | sort -u)
+find vendor/javascript vendor/assets app/assets -type f 2>/dev/null | grep -oE "(beercss|turbo|stimulus|tailwind|bootstrap)" | sort -u
 
 # JS/UI from package.json
-JS_NPM=$(grep -E '"(dependencies|devDependencies)"' package.json 2>/dev/null | grep -oE "(beercss|turbo|stimulus)" | sort -u)
+grep -E '"(dependencies|devDependencies)"' package.json 2>/dev/null | grep -oE "(beercss|turbo|stimulus)" | sort -u
 ```
 
-Combine all sources into single dependency list (case-insensitive). Deduplicate entries.
+Normalize detected dependencies to lowercase. Build a single master list of all detected dependencies.
 
-## Step 3: Handle Existing Destination
+## Step 2: Check for Existing Rules
 
-Check if destination exists and has files:
+Check if `.claude/rules/hustler-rails/` exists and has files.
 
-```bash
-if [ -d "$DEST" ] && [ -n "$(find "$DEST" -type f -print -quit 2>/dev/null)" ]; then
-  HAS_EXISTING_FILES=true
-else
-  HAS_EXISTING_FILES=false
-fi
-```
-
-If `HAS_EXISTING_FILES=true`, use AskUserQuestion tool:
+If existing rules found, use AskUserQuestion tool:
 
 ```json
 {
@@ -82,63 +62,79 @@ If `HAS_EXISTING_FILES=true`, use AskUserQuestion tool:
 }
 ```
 
-Execute based on response:
+Handle response:
 
-- **Backup:** `mv "$DEST" "${DEST}.backup-$(date +%Y%m%d-%H%M%S)"`
-- **Merge:** Skip existing files during copy
-- **Cancel:** Exit
+- **Backup and recreate**: `mv .claude/rules/hustler-rails .claude/rules/hustler-rails.backup-$(date +%Y%m%d-%H%M%S)`
+- **Merge new files**: Skip files that already exist
+- **Cancel**: Exit without changes
 
-## Step 4: Filter and Copy Rules with Examples
+## Step 3: Find All Rule Files
 
-For each `.md` file in `$SRC`:
+Get list of all rule markdown files:
 
-1. Read front matter - Extract `dependencies: [...]` and `examples: [...]` arrays
-2. Check dependencies:
-   - If empty array → COPY (universal rule)
-   - If all dependencies satisfied → COPY
-   - Otherwise → SKIP
-3. Copy rule file - Preserve relative path from `$SRC` to `$DEST`
-4. Copy examples - If front matter has `examples: [...]`:
-   - For each example name, copy `$SRC/views/examples/{name}/` to `$DEST/views/examples/{name}/`
-   - Skip if example directory doesn't exist
-
-Example filtering logic:
-
-```yaml
-dependencies: []              # Always copy
-dependencies: [vcr]           # Copy if vcr in gems
-dependencies: [beercss]       # Copy if beercss detected
-examples: [beercss]           # Also copy views/examples/beercss/
-dependencies: [turbo-rails]   # Copy if turbo-rails in gems
-examples: [turbo]             # Also copy views/examples/turbo/
+```bash
+find {baseDir}/assets/rules -name "*.md" -type f | grep -v README.md
 ```
 
-Track: `copied_rules`, `copied_examples`, `skipped_files`
+## Step 4: Process Each Rule File
+
+For each rule file found:
+
+1. **Read the file** using Read tool
+2. **Parse front matter** - Extract `dependencies: [...]` and `examples: [...]` arrays
+3. **Check dependencies**:
+   - If `dependencies: []` (empty) → Rule is universal, COPY
+   - If all dependencies in list are detected → COPY
+   - If any dependency missing → SKIP
+4. **Copy rule file** if dependencies satisfied:
+   ```bash
+   mkdir -p "$(dirname .claude/rules/hustler-rails/[relative-path])"
+   cp [source-path] .claude/rules/hustler-rails/[relative-path]
+   ```
+5. **Copy examples** if front matter has `examples: [...]`:
+   - For each example name in array:
+     ```bash
+     mkdir -p .claude/rules/hustler-rails/views/examples
+     cp -r {baseDir}/assets/rules/views/examples/[name] .claude/rules/hustler-rails/views/examples/
+     ```
+
+**Dependency matching notes:**
+
+- Match case-insensitively
+- Handle database adapter aliases:
+  - `sqlite` or `sqlite3` → matches sqlite3 adapter
+  - `pg` or `postgresql` → matches postgresql adapter
+  - `mysql` or `mysql2` → matches mysql2 adapter
+
+Track:
+
+- Rules copied count
+- Rules skipped count
+- Examples copied count
+- List of matched dependencies
+- List of skipped dependencies with reasons
 
 ## Step 5: Report Results
 
-Report initialization results:
+Report detailed summary:
 
 ```
 ✅ hustler-rails rules initialized
 
 📊 Results:
-   Rules: [copied_count] copied, [skipped_count] skipped
-   Examples: [example_count] directories copied
-   Matched dependencies: [dependency list]
-   Skipped dependencies: [dependency list with reasons]
+   Rules: [X] copied, [Y] skipped
+   Examples: [Z] directories copied
 
-📍 Destination: $DEST
+📍 Destination: .claude/rules/hustler-rails/
+
+Matched dependencies:
+- pundit (Gemfile.lock)
+- beercss (CDN in app/views/layouts/application.html.erb)
+- sqlite3 (database.yml)
+
+Skipped rules (missing dependencies):
+- views/topics/tailwind/tailwind-components.md (requires: tailwind)
+- authorization/topics/cancancan/cancancan-abilities.md (requires: cancancan)
 ```
 
-List dependencies with detection source:
-
-- pundit (Gemfile.lock)
-- beercss (CDN link in app/views/layouts/application.html.erb)
-- sqlite (database.yml)
-
-List copied examples:
-
-- beercss (referenced by views/topics/beercss/beercss-components.md)
-- turbo (referenced by views/topics/turbo/turbo-patterns.md)
-- simple_form (referenced by views/topics/simple_form/simple-form.md)
+List each copied example with the rule that referenced it.
