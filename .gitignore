@@ -19,9 +19,8 @@ Thumbs.db
 *.swp
 *.swo
 
-# Claude Code (local development only - don't ship with plugin)
-CLAUDE.md
-.claude/
+# Claude Code local state (don't ship with plugin)
+/.claude/
 
 */tmp
 tmp/*
