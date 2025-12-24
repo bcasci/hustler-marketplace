@@ -1,9 +1,14 @@
 {
-  "name": "hustler-marketplace",
+  "name": "hustler-studio",
   "owner": {
     "name": "Brandon Casci"
   },
   "plugins": [
+    {
+      "name": "hustler-studio",
+      "source": "./studio-plugin",
+      "description": "Disciplined development workflows: TDD, refactoring, planning, and quality gates"
+    },
     {
       "name": "hustle",
       "source": "./hustle-plugin",

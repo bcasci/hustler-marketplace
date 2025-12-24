@@ -1,40 +1,73 @@
-# Hustle Plugin Marketplace
+# Hustler Studio
 
-Development marketplace for the hustle-plugin Claude Code extension.
+Claude Code plugins for shipping quality software.
 
-## Structure
+## Plugins
 
-```
-hustler-marketplace/
-├── .claude-plugin/
-│   └── marketplace.json         # Marketplace configuration
-└── hustle-plugin/               # The plugin itself
-    ├── .claude-plugin/
-    │   └── plugin.json          # Plugin manifest
-    ├── commands/                # Slash commands
-    ├── agents/                  # Custom agents
-    ├── skills/                  # Agent skills
-    ├── hooks/                   # Event handlers
-    ├── scripts/                 # Hook scripts
-    └── mcp-config.json         # MCP server configuration
-```
+### hustler-studio
+
+**Status:** Coming soon
+
+Disciplined development workflows: TDD, refactoring, planning, and quality gates.
+
+- Project-agnostic (works in any codebase)
+- Adapts to your conventions via project memory
+- Lean and pragmatic (KISS, YAGNI)
+
+### hustler-rails
+
+Rails-specific composable rules that adapt to your dependencies.
+
+- Opinionated conventions for Rails development
+- Composable: Only copies rules for gems/libraries you actually use
+- Smart detection: Gemfile.lock, database.yml, JS/UI libraries
+- Helps bootstrap projects with conventions quickly
+
+### prompting
+
+Prompt writing and optimization using documented techniques.
+
+- Generate, analyze, and optimize prompts
+- Applies decision framework and best practices
+- Removes bloat, improves clarity
+
+## Future Tech Stack Plugins
+
+The composable rules pattern can extend to other stacks:
+
+- **Django** - Python web framework conventions
+- **Laravel** - PHP framework patterns
+- **Next.js** - React framework best practices
+- **NestJS** - Node.js framework structure
+- **Phoenix** - Elixir web patterns
+- **Spring Boot** - Java enterprise conventions
+- **FastAPI** - Modern Python API patterns
+
+Each provides opinionated, composable rules that bootstrap conventions quickly.
 
 ## Installation
 
-To install this marketplace in Claude Code:
+Add this marketplace to Claude Code:
 
-1. Add this repository to your Claude Code configuration
-2. The hustle-plugin will be available for installation
+```bash
+/plugin marketplace add bcasci/hustle-marketplace
+```
 
-## Development
+Then browse and install plugins using the `/plugin` menu, or install directly:
 
-The `hustle-plugin/` directory contains the actual plugin. Edit components there:
+```bash
+/plugin install hustler-studio
+/plugin install hustler-rails
+/plugin install prompting
+```
 
-- Add commands in `hustle-plugin/commands/`
-- Create agents in `hustle-plugin/agents/`
-- Build skills in `hustle-plugin/skills/`
-- Configure hooks in `hustle-plugin/hooks/`
-- Add MCP servers to `hustle-plugin/mcp-config.json`
+## Philosophy
+
+**Lean and pragmatic.** Simple workflows that work. No over-engineering.
+
+- KISS - Keep it simple
+- YAGNI - Build what's useful, skip what's clever
+- Pragmatic - Solve real problems, ship quality code
 
 ## License
 
