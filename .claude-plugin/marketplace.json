@@ -10,11 +10,6 @@
       "description": "Disciplined development workflows: TDD, refactoring, planning, and quality gates"
     },
     {
-      "name": "hustle",
-      "source": "./hustle-plugin",
-      "description": "Claude Code plugin for hustling stuff"
-    },
-    {
       "name": "prompting",
       "source": "./prompting_plugin",
       "description": "Prompt writing and analysis skill using real, documented techniques"
