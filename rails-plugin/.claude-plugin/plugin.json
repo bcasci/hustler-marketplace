@@ -1,6 +1,6 @@
 {
   "name": "hustler-rails",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Ruby on Rails development tools and best practices for Claude Code, the hustler way.",
   "author": {
     "name": "Brandon Casci"
