@@ -11,6 +11,5 @@
   "keywords": ["ruby", "rails", "ruby-on-rails", "mvc", "web-development"],
   "commands": "./commands/",
   "skills": "./skills/",
-  "scripts": "./scripts/",
   "hooks": "./hooks/hooks.json"
 }
