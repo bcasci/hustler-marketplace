@@ -3,7 +3,7 @@ set -e
 
 # Get base directory
 BASE_DIR="${1:-$(cd "$(dirname "$0")/.." && pwd)}"
-RULES_SOURCE="$BASE_DIR/skills/init-rules/assets/rules"
+RULES_SOURCE="$BASE_DIR/assets/rules"
 RULES_DEST=".claude/rules/hustler-rails"
 
 echo "Detecting dependencies..."
