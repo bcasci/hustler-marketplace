@@ -164,6 +164,40 @@ Universal UI/UX decision framework. Framework-agnostic guidance for when to use 
 
 ---
 
+## Button Placement
+
+### Cancel Button
+
+**Include cancel when:**
+
+- **Editing existing record** - User needs "nevermind" option to return without saving
+- **Multi-step process** - User needs escape hatch to abandon workflow
+- **Modal/dialog context** - User needs explicit close (no browser back button)
+
+**Omit cancel when:**
+
+- **Creating new record from standalone page** - Navigation IS the cancel
+- **Settings page** - User navigates away via menu (no workflow commitment)
+- **Single-step standalone forms** - Back button serves as cancel
+
+---
+
+### Delete Button
+
+**Always include:**
+
+- **Confirmation dialog** - Prevent accidental deletion
+- **Destructive styling** - Visual distinction from primary actions
+- **Clear consequence** - User understands what will be deleted
+
+**Position:**
+
+- **After primary actions** - Edit before delete
+- **Visually separated** - Different styling or spacing
+- **Context-appropriate** - In item actions, not global nav
+
+---
+
 ## Decision Framework
 
 **Start here:**

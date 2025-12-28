@@ -59,26 +59,6 @@ en:
 <%= Article.human_attribute_name("article/status.#{article.status}") %>
 ```
 
-**OR use descriptors pattern for status chips with colors:**
-
-`config/locales/en.yml`:
-
-```yaml
-en:
-  descriptors:
-    listing_state:
-      draft:
-        label: "Draft"
-        color: "grey"
-      published:
-        label: "Published"
-        color: "green"
-```
-
-```erb
-<%= t("descriptors.listing_state.#{album.listing_state}.label") %>
-```
-
 ---
 
 ### For View-Specific Text (Headers, Descriptions, Instructions)
@@ -116,12 +96,12 @@ en:
 
 **Where:** `config/locales/en.yml` under top-level keys
 
-**Common sections:**
+**Common examples:**
 
-- `buttons.*` - Button labels
-- `card_titles.*` - Card header patterns
-- `descriptors.*` - Status/state labels with colors
-- `file_types.*` - File type labels
+- `buttons.save`, `buttons.cancel`, `buttons.delete` - Button labels
+- `actions.edit`, `actions.delete` - Action labels
+- `file_types.image`, `file_types.video` - File type labels
+- `messages.success`, `messages.error` - Generic messages
 
 ---
 
@@ -213,23 +193,6 @@ card_titles:
 descriptors:
   recommended: "Recommended %{resource}"
 ```
-
----
-
-## Empty States Pattern
-
-```yaml
-# models/album.en.yml
-en:
-  activerecord:
-    attributes:
-      album/empty_state:
-        icon: "sell"
-        message: "Your store has no Albums."
-        action_label: "Add an Album"
-```
-
-Used by: `render partial: 'manage/shared/empty_state', locals: { resource: Album }`
 
 ---
 

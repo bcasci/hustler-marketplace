@@ -289,15 +289,3 @@ Grep "render.*'shared/[partial]'" app/views/**/*.erb
 | Form                       | Local partial  | `_form.html.erb`          | `render 'form'`                    |
 | Collection item            | Local partial  | `_resource.html.erb`      | `render @resources`                |
 
----
-
-## Template Library
-
-**Structural scaffolds:** `templates/` for copyable patterns:
-
-- Index pages
-- Show pages
-- Forms
-- Dialogs
-- Turbo frames
-- Empty states

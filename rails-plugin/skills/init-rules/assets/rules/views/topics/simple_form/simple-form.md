@@ -6,7 +6,7 @@ examples: [simple_form]
 
 # Simple Form Patterns
 
-Simple Form gem conventions for this project.
+Simple Form gem conventions.
 
 ---
 
@@ -23,8 +23,6 @@ Simple Form gem conventions for this project.
 <%# ✅ GOOD - Let Simple Form generate wrapper %>
 <%= f.input :name %>
 ```
-
-**Why**: Simple Form automatically wraps inputs with proper markup. Adding extra divs breaks styling and structure.
 
 ---
 
@@ -60,19 +58,6 @@ Simple Form automatically fetches translations from:
 ls app/inputs/
 ```
 
-**Common custom inputs in this project:**
-
-- `image_upload_input.rb` - Image file upload with preview
-- `tag_select_input.rb` - Tag selection interface
-- Others discoverable in `app/inputs/`
-
-**Usage:**
-
-```erb
-<%= f.input :cover_image, as: :image_upload %>
-<%= f.input :tags, as: :tag_select %>
-```
-
 **When to create custom input:**
 
 - Complex input logic (file upload, multi-select, date picker)
@@ -89,21 +74,59 @@ ls app/inputs/
 ## Standard Form Pattern
 
 ```erb
-<%= simple_form_for [:manage, @album] do |f| %>
+<%= simple_form_for [:namespace, @resource] do |f| %>
   <%= f.input :name %>
   <%= f.input :description %>
-  <%= f.input :release_date, as: :string, input_html: { type: 'date' } %>
-  <%= f.input :cover_image, as: :image_upload %>
+  <%= f.input :published_at, as: :string, input_html: { type: 'date' } %>
+  <%= f.input :image, as: :file %>
   <%= f.button :submit %>
 <% end %>
 ```
 
 **Pattern:**
 
-- Namespace in form target: `[:manage, @album]`
+- Namespace in form target: `[:namespace, @resource]`
 - Minimal attributes (let i18n handle labels)
 - Custom inputs when available
 - Submit button at end
+
+---
+
+## Submit Button Patterns
+
+### Default: Simple Form Helper
+
+**Rails automatically labels the button:**
+
+```erb
+<%= f.button :submit %>
+```
+
+Provides "Create [Model]" or "Update [Model]" based on object state.
+
+---
+
+### With Block Form (Custom Content)
+
+**Pass custom content to button:**
+
+```erb
+<%= f.button :submit do %>
+  Custom content here
+<% end %>
+```
+
+---
+
+### Manual Button (Last Resort)
+
+**Only when Simple Form helper doesn't work:**
+
+```erb
+<button type="submit">Submit</button>
+```
+
+**Rule:** Use Simple Form helper when possible - manual buttons sparingly.
 
 ---
 
@@ -112,12 +135,12 @@ ls app/inputs/
 **Use `simple_fields_for` for associations:**
 
 ```erb
-<%= simple_form_for @album do |f| %>
+<%= simple_form_for @resource do |f| %>
   <%= f.input :name %>
 
-  <%= f.simple_fields_for :tracks do |track_form| %>
-    <%= track_form.input :title %>
-    <%= track_form.input :duration %>
+  <%= f.simple_fields_for :items do |item_form| %>
+    <%= item_form.input :title %>
+    <%= item_form.input :quantity %>
   <% end %>
 
   <%= f.button :submit %>

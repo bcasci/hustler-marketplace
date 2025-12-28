@@ -20,7 +20,6 @@ Thumbs.db
 *.swo
 
 # Claude Code local state (don't ship with plugin)
-/.claude/
 
 */tmp
 tmp/*

@@ -620,11 +620,61 @@ testing/topics/
 
 ---
 
+## Generic Examples
+
+**Rules must use generic, framework-agnostic examples** - not project-specific implementations.
+
+### Standard Placeholders
+
+**Models:**
+- ✅ `@resource`, `@item`, `@related_item`
+- ✅ `Resource`, `Item`, `Category`
+- ✅ Generic domain models: `Order`, `Customer`, `User`, `Product`
+- ❌ `@album`, `@track`, `@variant`, `@listing`
+- ❌ Project models: `Album`, `Track`, `Variant`, `Listing`
+
+**Namespaces:**
+- ✅ `:namespace`, `:scope`
+- ❌ `:manage`, `:admin`, `:seller`, `:buyer`
+
+**Paths:**
+- ✅ `namespace_resource_path`, `resource_items_path`
+- ❌ `manage_album_path`, `seller_listing_path`
+
+**Attributes:**
+- ✅ `name`, `title`, `description`, `published_at`
+- ❌ `release_date`, `cover_image`, `listing_state`
+
+**Why:** Examples teach patterns, not specific implementations. Generic examples work for any project.
+
+### Exception: Domain Models
+
+Acceptable to use recognizable domain models when teaching database/business patterns:
+
+```ruby
+# ✅ GOOD - Generic e-commerce domain
+Order.joins(:customer).where(customers: { active: true })
+
+# ✅ GOOD - Generic HR domain
+User.where(department_id: Department.active.select(:id))
+
+# ❌ BAD - Project-specific
+Album.joins(:organization).where(organizations: { status: 'active' })
+```
+
+Use `Order`, `Customer`, `User`, `Department` for database examples - they're universally understood.
+
+Avoid `Album`, `Track`, `Listing`, `Variant` - these are project-specific.
+
+---
+
 ## Quick Quality Checklist
 
 Before finalizing any rules file, verify:
 
 - [ ] No "why use X" or benefits sections
+- [ ] No "Benefits:", "Why:", or "Problems:" sections
+- [ ] Examples use generic placeholders (@resource, :namespace, not @album, :manage)
 - [ ] No tool opinions (unless gem-specific file)
 - [ ] No cross-references within same context
 - [ ] Domain files don't teach cross-cutting tools

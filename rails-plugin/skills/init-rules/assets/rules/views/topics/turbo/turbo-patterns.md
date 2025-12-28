@@ -16,29 +16,29 @@ Turbo Frames for lazy loading, Turbo Streams for partial page updates.
 
 ```erb
 <%# GOOD - Render existing partial %>
-<%= turbo_stream.replace "pin_button_form" do %>
-  <%= render partial: "shared/pin_icon", locals: { product_pin: @product_pin } %>
+<%= turbo_stream.replace "action_button" do %>
+  <%= render partial: "shared/button", locals: { resource: @resource } %>
 <% end %>
 
 <%# GOOD - Render full template %>
-<%= turbo_stream.replace dom_id(current_cart) do %>
-  <%= render template: 'carts/show' %>
+<%= turbo_stream.replace dom_id(@resource) do %>
+  <%= render template: 'resources/show' %>
 <% end %>
 
 <%# GOOD - Update with partial %>
-<%= turbo_stream.update 'shopping_cart_button' do %>
-  <%= render partial: 'layouts/navigation/shopping_cart_icon', locals: { items_count: current_cart_items_count } %>
+<%= turbo_stream.update 'header_counter' do %>
+  <%= render partial: 'layouts/navigation/counter', locals: { count: @count } %>
 <% end %>
 
 <%# ACCEPTABLE - Minimal inline markup (empty div, script tag) %>
-<%= turbo_stream.replace 'recommend_button_container' do %>
-  <div id="recommend_button_container"></div>
+<%= turbo_stream.replace 'container' do %>
+  <div id="container"></div>
 <% end %>
 
 <%# BAD - Duplicating partial markup inline %>
-<%= turbo_stream.replace "user_avatar" do %>
-  <i class="small circle">  <%# DON'T - this markup exists in shared/avatar partial %>
-    <%= image_tag @user.avatar.variant(:thumb) %>
+<%= turbo_stream.replace "avatar" do %>
+  <i>  <%# DON'T - this markup exists in shared/avatar partial %>
+    <%= image_tag @user.avatar %>
   </i>
 <% end %>
 ```
@@ -66,14 +66,14 @@ Turbo Frames for lazy loading, Turbo Streams for partial page updates.
 
 ```erb
 <%# Trigger (parent view) %>
-<%= turbo_frame_tag dom_id(@album, 'tracks'),
-                    src: manage_album_tracks_path(@album) do %>
-  <div class="fill medium-height middle-align center-align"></div>
+<%= turbo_frame_tag dom_id(@resource, 'items'),
+                    src: namespace_resource_items_path(@resource) do %>
+  <p>Loading...</p>
 <% end %>
 
 <%# Target (separate controller action) %>
-<%= turbo_frame_tag dom_id(@album, 'tracks') do %>
-  <article class="no-elevate card">
+<%= turbo_frame_tag dom_id(@resource, 'items') do %>
+  <article>
     <%# content %>
   </article>
 <% end %>
@@ -82,19 +82,12 @@ Turbo Frames for lazy loading, Turbo Streams for partial page updates.
 **Routes setup:**
 
 ```ruby
-resources :albums do
-  resources :tracks, controller: 'manage/tracks'
-  resources :variants, controller: 'manage/album_variants'
-  resources :genres, controller: 'manage/genres'
+resources :resources do
+  resources :items, controller: 'namespace/items'
+  resources :variants, controller: 'namespace/resource_variants'
+  resources :categories, controller: 'namespace/categories'
 end
 ```
-
-**Benefits:**
-
-- Each resource controller handles its own logic
-- Independent testing
-- Clear separation of concerns
-- Can navigate directly to resource URL
 
 ---
 
@@ -104,7 +97,7 @@ end
 
 ```erb
 <%= turbo_frame_tag 'content', src: path do %>
-  <div class="fill medium-height middle-align center-align"></div>
+  <p>Loading...</p>
 <% end %>
 ```
 
@@ -114,7 +107,7 @@ Loads on page render.
 
 ```erb
 <%= turbo_frame_tag 'content', src: path, loading: :lazy do %>
-  <div class="fill medium-height middle-align center-align"></div>
+  <p>Loading...</p>
 <% end %>
 ```
 
@@ -124,7 +117,7 @@ Loads when scrolled into viewport. Use for below-the-fold content.
 
 ```erb
 <%= turbo_frame_tag 'content', src: path, loading: :eager do %>
-  <div class="fill medium-height middle-align center-align"></div>
+  <p>Loading...</p>
 <% end %>
 ```
 
@@ -145,37 +138,75 @@ Use when only one frame of this type per page.
 **Scoped with dom_id:**
 
 ```erb
-turbo_frame_tag dom_id(@album, 'tracks'), src: path
-turbo_frame_tag dom_id(@album, Genre.model_name.plural), src: path
+turbo_frame_tag dom_id(@resource, 'items'), src: path
+turbo_frame_tag dom_id(@resource, Category.model_name.plural), src: path
 ```
 
-Use when multiple parents might have same child type.
+Use when multiple parents might have same child type. `dom_id` generates unique IDs like `resource_123_items`.
 
-**Benefits of dom_id:**
+---
 
-- Prevents ID collisions
-- Automatically generates unique IDs
-- Consistent naming: `album_123_tracks`
+## List Partial + Turbo Frame Coordination
+
+**Pattern:** Index page defines static wrapper ONCE, list partial contains ONLY dynamic content. Turbo Streams replace only the nested frame.
+
+**Why:** Zero duplication of wrapper markup, smaller Turbo Stream payloads, single source of truth.
+
+**Structure:**
+
+1. Index page: Static wrapper (nav, header, buttons) + turbo_frame
+2. List partial: ONLY list content (users.any? → render items, else empty state)
+3. Turbo Stream: Replace ONLY the nested frame
+
+**Example:**
+
+```erb
+<%# index.html.erb - Static wrapper stays in place %>
+<nav>
+  <h4>Users</h4>
+  <button data-controller="dialog">Add User</button>
+</nav>
+
+<article>
+  <%= turbo_frame_tag "users_list" do %>
+    <%= render "user_list", users: @users, empty_state: @empty_state %>
+  <% end %>
+</article>
+```
+
+```erb
+<%# _user_list.html.erb - ONLY list content, NO wrapper %>
+<% if users.any? %>
+  <ul>
+    <%= render users %>  <%# Renders _user.html.erb for each %>
+  </ul>
+<% else %>
+  <%= render_empty_state(empty_state) %>
+<% end %>
+```
+
+```erb
+<%# create.turbo_stream.erb - Replace ONLY the list %>
+<%= turbo_stream.replace "users_list" do %>
+  <%= turbo_frame_tag "users_list" do %>
+    <%= render partial: "user_list", locals: { users: @users, empty_state: @empty_state } %>
+  <% end %>
+<% end %>
+```
 
 ---
 
 ### Loading Placeholders
 
-**Standard heights:**
+Turbo frames display fallback content while loading from `src:`.
+
+**Prevent layout shift:** Match placeholder height to expected content so the page doesn't jump when frame loads.
 
 ```erb
-<div class="fill small-height middle-align center-align"></div>    # ~100px
-<div class="fill medium-height middle-align center-align"></div>   # ~200px
-<div class="fill large-height middle-align center-align"></div>    # ~400px
-```
-
-**Custom with content:**
-
-```erb
-<div class="padding center-align grey-text">
-  <i>hourglass_empty</i>
-  <p>Loading...</p>
-</div>
+<%= turbo_frame_tag 'content', src: path, loading: :lazy do %>
+  <%# Fallback content - shows until frame loads %>
+  <%# Use loading state markup from project conventions %>
+<% end %>
 ```
 
 ---
@@ -191,6 +222,7 @@ Use when multiple parents might have same child type.
 **Pattern:** Coordinate multiple DOM updates in a single response.
 
 **Common sequence:**
+
 1. Add/update item in list (prepend/append)
 2. Update counts or related elements
 3. Remove empty states
@@ -307,6 +339,50 @@ Use when multiple parents might have same child type.
 
 ---
 
+## Turbo Confirmations
+
+**Use `turbo_confirm` for pre-action dialogs** (BEFORE destructive action).
+
+**Pattern:**
+
+```erb
+<%= button_to resource_path(@resource),
+              method: :delete,
+              data: { turbo_confirm: t('.delete_confirm') } do %>
+  <%= t('actions.delete') %>
+<% end %>
+
+<%# Or with link_to %>
+<%= link_to t('actions.delete'),
+            resource_path(@resource),
+            data: { turbo_method: :delete, turbo_confirm: t('.delete_confirm') } %>
+```
+
+**i18n structure (view-scoped):**
+
+Location: `config/locales/views/{controller}.en.yml`
+
+```yaml
+en:
+  resources:
+    show:
+      delete_confirm: "Delete this resource? This cannot be undone."
+```
+
+**When to use:**
+
+- BEFORE destructive actions (delete, archive)
+- User confirmation needed before proceeding
+- Turbo-native dialogs (not JavaScript confirm())
+
+**Don't use for:**
+
+- Post-action notifications (use flash messages)
+- Form validation errors (render with errors)
+- Multi-step workflows (use Turbo Frames/dialogs)
+
+---
+
 ## Discovery
 
 **Find lazy frames:**
@@ -325,4 +401,10 @@ Glob "app/views/**/*.turbo_stream.erb"
 
 ```bash
 Grep -C 3 "turbo_stream\." app/views/**/*.turbo_stream.erb
+```
+
+**Find turbo confirmations:**
+
+```bash
+Grep "turbo_confirm" app/views/**/*.erb
 ```
