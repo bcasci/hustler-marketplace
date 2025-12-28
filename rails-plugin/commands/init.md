@@ -4,4 +4,4 @@ description: Initialize .claude/rules/hustler-rails/ with Rails conventions tail
 
 # Purpose
 
-invoke Skill(hustler-rails:init-rules) to initialize Rails conventions for the current project.
+Use the Skill tool to invoke your`hustler-rails:init-rules` and initialize Rails conventions for this project.
