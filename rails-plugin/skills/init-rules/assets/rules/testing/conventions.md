@@ -5,6 +5,108 @@ dependencies: []
 
 # Testing Philosophy
 
+## Test Type Decision Tree
+
+**START HERE: What are you testing?**
+
+### Browser/UI Behavior? → System Test
+
+- Testing what users see/do in a browser
+- UI interactions (clicks, forms, navigation)
+- JavaScript/Stimulus controllers
+- Turbo Frames/Streams
+- Complete user workflows
+
+**Granularity:** One complete user journey per test
+
+**Example:** "User updates settings and sees confirmation"
+
+### Multi-Request Workflow? → Integration Test
+
+- Multiple HTTP requests in sequence
+- No browser or JavaScript needed
+- Authentication flows, API workflows
+- Cross-controller workflows
+
+**Granularity:** One workflow per test, multiple assertions per step
+
+**Example:** "Magic link authentication with token reuse"
+
+### Single Behavior? → Unit Test
+
+- Individual model/controller/command behavior
+- Isolated functionality
+- Fast execution
+
+**Granularity:** One focused assertion per test
+
+**Example:** "Payment validation", "Controller authorization"
+
+## Granularity Rules
+
+### Unit Test: One Assertion per Test
+
+```ruby
+# ✅ GOOD - Precise failure diagnosis
+it 'sets status to successful' do
+  assert_equal 'successful', subject.status
+end
+
+it 'sets completed_at timestamp' do
+  assert_not_nil subject.completed_at
+end
+```
+
+**Why:** When test fails, you know EXACTLY which behavior broke.
+
+### Integration Test: One Workflow per Test
+
+```ruby
+# ✅ GOOD - Complete workflow with checkpoints
+it 'authenticates user with magic link' do
+  # Step 1: Request link
+  post auth_sign_in_path, params: { email: user.email }
+  assert_response :success
+
+  # Step 2: Click link
+  get confirm_auth_sign_in_path(session, token)
+  assert_response :redirect
+
+  # Step 3: Access protected resource
+  get dashboard_path
+  assert_response :success
+end
+```
+
+**Why:** Workflow steps have sequential dependencies.
+
+### System Test: One Journey per Test
+
+```ruby
+# ✅ GOOD - Complete user task
+it 'updates timezone via settings' do
+  click_link "Settings"
+  select "Eastern Time", from: "Timezone"
+  click_button "Save"
+
+  assert_text "Settings updated"
+  assert_text "America/New_York"
+end
+```
+
+**Why:** Users complete tasks, not individual clicks.
+
+## Test Smell Checklist
+
+Before committing any test, verify:
+
+- [ ] Does this test what it claims?
+- [ ] Can this test actually fail?
+- [ ] Am I testing MY code or Rails?
+- [ ] Is granularity correct for test type?
+
+---
+
 ## The Core Question: Does This Test Earn Its Place?
 
 Before writing any test, ask these three questions in order:
@@ -132,6 +234,7 @@ Is this business logic?
 Test where the logic lives, not where you saw the bug.
 
 **Check domain-specific patterns:**
+
 - Models → test/topics/models.md
 - Controllers → test/topics/controllers.md
 - Commands → test/topics/business-logic.md

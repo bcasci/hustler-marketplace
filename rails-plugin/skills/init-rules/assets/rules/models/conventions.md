@@ -28,6 +28,47 @@ dependencies: []
 
 ---
 
+## Validations
+
+**BEFORE writing custom `validate`:**
+
+Try built-in validators + conditions first.
+
+### ❌ Custom Validation
+
+```ruby
+validate :only_one_root
+
+private
+
+def only_one_root
+  if root? && self.class.exists?(root: true, organization: organization)
+    errors.add(:root, "only one root allowed")
+  end
+end
+```
+
+### ✅ Built-in with Conditions
+
+```ruby
+validates :root, uniqueness: { scope: :organization }, if: :root?
+```
+
+**Decision tree:**
+
+1. Can I express this with built-in validators? → Use them
+2. Do I need conditional logic? → Add `if:` or `unless:`
+3. Do I need complex business rules? → Consider custom validator class
+4. Is validation only relevant in specific contexts? → Use `on: :context`
+
+**Common built-ins:**
+
+- `presence`, `uniqueness`, `inclusion`, `exclusion`
+- `numericality`, `length`, `format`
+- `comparison` (Rails 7+)
+
+---
+
 ## Model Structure
 
 Standard order:
@@ -131,15 +172,3 @@ end
 ```
 
 **In controllers:** Use `current_organization.products` not `Product.where(organization: ...)`
-
----
-
-## Discovery
-
-**Model examples:** `Glob "app/models/**/*.rb"`
-
-**Similar implementations:** `Grep "pattern" app/models/**/*.rb`
-
-**Associations:** See `associations.md` for join models, scoped associations, YAGNI principle
-
-**Commands:** See `business-logic/conventions.md` for when to extract complex operations

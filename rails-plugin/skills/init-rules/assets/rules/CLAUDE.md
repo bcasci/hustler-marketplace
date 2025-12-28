@@ -18,7 +18,7 @@ Path-based auto-loading: Files load when their `paths:` frontmatter matches the 
 
 ## Required Structure
 
-Every domain uses ONE of these patterns (zero exceptions):
+Every domain uses ONE of these patterns:
 
 **Single file:**
 
@@ -26,13 +26,27 @@ Every domain uses ONE of these patterns (zero exceptions):
 domain/conventions.md
 ```
 
-**Multiple topics:**
+**Multiple topics (universal domain):**
 
 ```
 domain/
 ├── conventions.md
 └── topics/*.md
 ```
+
+**Topics only (optional domain):**
+
+```
+domain/
+└── topics/
+    ├── [gem]-[feature].md
+    └── [gem]-[feature].md
+```
+
+**When to use each:**
+- **Single file**: Domain has < 200 lines of conventions
+- **Multiple topics with conventions.md**: Domain has universal conventions that apply regardless of gem choice
+- **Topics only**: Domain represents optional feature where implementation is delegated to gems (no universal conventions exist)
 
 ## Content Decision Tree
 
@@ -75,6 +89,94 @@ Before adding/keeping content, ask these questions **in order**:
 - Single: "The albums controller uses a before_action for authorization" ❌
 
 **→ If single implementation: Remove it.**
+
+---
+
+## Domain Organization Guidelines
+
+### Optional vs Universal Domains
+
+**Universal domains** have conventions that apply regardless of implementation choice:
+- `models/` - ActiveRecord patterns apply to all Rails apps
+- `controllers/` - ActionController patterns apply to all Rails apps
+- `views/` - ActionView patterns apply to all Rails apps
+- `architecture/` - Design principles apply regardless of framework choices
+- `code-style/` - Ruby idioms apply regardless of gems used
+
+**Optional domains** represent features where implementation is delegated to gem choices:
+- `authentication/` - Passwordless, Devise, Clearance, etc.
+- `authorization/` - Pundit, CanCanCan, ActionPolicy, etc.
+
+**Rule for optional domains:**
+- Include `conventions.md` ONLY if genuine cross-gem conventions exist (e.g., `current_user` naming)
+- Otherwise use topics-only structure with gem-specific files
+
+**Examples:**
+```
+# Has universal conventions
+authentication/
+├── conventions.md  # current_user, authenticate_user! naming
+└── topics/
+    └── passwordless/
+        ├── passwordless-user.md
+        └── passwordless-session.md
+
+# No universal conventions
+authorization/
+└── topics/
+    └── pundit/
+        ├── pundit-policies.md
+        └── pundit-controllers.md
+```
+
+### Architecture vs Code-Style Boundary
+
+**architecture/** - Macro/strategic decisions at file and class level:
+- "Should I extract this logic into a Command?"
+- "When do I create a Value Object?"
+- "Do I need a Service Layer here?"
+- Object-oriented design principles (Tell, Don't Ask)
+- Pattern selection (Command, Builder, Query Object)
+
+**code-style/** - Micro/tactical decisions at line and method level:
+- "How do I write this conditional?"
+- "Should this be a one-liner guard clause?"
+- "Can I simplify this string concatenation?"
+- Ruby idioms and syntax patterns
+- Method-level refactoring patterns
+
+**Test:** If it affects which file code goes in or whether you create a new class → architecture/. If it affects how you write a specific line of code → code-style/.
+
+### Testing Separation for Gem-Specific Features
+
+**Gem-specific features use parallel testing structure:**
+
+Implementation files go in feature domain:
+```
+authentication/topics/passwordless/
+├── passwordless-user.md
+├── passwordless-session.md
+└── passwordless-routes.md
+```
+
+Testing files go in testing domain:
+```
+testing/topics/passwordless/
+├── passwordless-models.md
+├── passwordless-controllers.md
+├── passwordless-system.md
+└── passwordless-mailers.md
+```
+
+**Why separate:**
+- Testing and implementation are different concerns
+- Test files cover multiple test types (models, controllers, system)
+- Keeps implementation files focused on patterns, not testing
+- Testing domain can load all relevant test patterns together
+
+**Naming:** Use same `[gem]-[aspect]` prefix in both locations for discoverability.
+
+---
 
 ## Keep These
 
@@ -260,6 +362,8 @@ describe/it/let/before patterns...
 - `testing/topics/minitest-spec-structure.md` - Only if using Minitest
 - `testing/topics/vcr-external-apis.md` - Only if using VCR
 - `models/topics/discard-soft-delete.md` - Only if using Discard gem
+- `authentication/topics/passwordless/passwordless-user.md` - Only if using Passwordless
+- `authorization/topics/pundit/pundit-policies.md` - Only if using Pundit
 
 ---
 
@@ -314,29 +418,31 @@ For authorization in views, refer to project memory
 **Include concept + implementation in single file:**
 
 ```markdown
-# discard-soft-delete.md
+# passwordless-user.md
 
-## What is Soft Delete
+## What is Passwordless
 
 Brief explanation (2-3 sentences max)
 
 ## Usage
 
-Discard gem API
+Passwordless gem API patterns
 
 ## Project Rules
 
-When we use soft delete filtering
+When and how to use passwordless authentication
 
-## Patterns
+## Integration Patterns
 
-Scoped associations, testing
+Session helpers, email flow, multi-tenancy
 ```
 
 **DON'T split into:**
 
-- `soft-delete.md` (concept)
-- `discard-soft-delete.md` (implementation)
+- `passwordless.md` (concept)
+- `passwordless-user.md` (implementation)
+
+**Note:** Testing goes in separate parallel structure (`testing/topics/passwordless/`), not in implementation files.
 
 Sub-topics use single comprehensive files.
 
@@ -478,27 +584,38 @@ has_many :kept_packaged_with, -> { kept }
 **First-class topics** get directories:
 
 ```
-authorization/
+authentication/
 ├── conventions.md
 └── topics/
-    ├── pundit-policies.md
-    ├── pundit-controllers.md
-    └── pundit-views.md
+    └── passwordless/
+        ├── passwordless-user.md
+        ├── passwordless-session.md
+        └── passwordless-routes.md
 ```
 
-**Sub-topics** get single comprehensive files:
+**Sub-topics** get single comprehensive files within topics/:
 
 ```
-models/topics/
-└── discard-soft-delete.md  # Comprehensive, no sub-directory
+authentication/topics/passwordless/
+└── passwordless-user.md  # Comprehensive, includes concept + usage
+```
+
+**Testing follows parallel structure:**
+
+```
+testing/topics/
+└── passwordless/
+    ├── passwordless-models.md
+    ├── passwordless-controllers.md
+    └── passwordless-system.md
 ```
 
 **NEVER create three-level hierarchies:**
 
 ```
-❌ models/topics/soft-delete/
-   ├── concept.md
-   └── discard.md
+❌ authentication/topics/passwordless/implementation/
+   ├── user.md
+   └── session.md
 ```
 
 ---
@@ -516,3 +633,7 @@ Before finalizing any rules file, verify:
 - [ ] No "what is X" education (just conventions)
 - [ ] File works independently of other files
 - [ ] Focus on WHEN/HOW, not WHAT/WHERE
+- [ ] Optional domains only have conventions.md if cross-gem conventions exist
+- [ ] Architecture/ placement for macro decisions, code-style/ for micro decisions
+- [ ] Testing separated into testing/topics/[feature]/ for gem-specific features
+- [ ] Frontmatter paths: and dependencies: accurately reflect scope and requirements

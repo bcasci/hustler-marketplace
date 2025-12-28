@@ -33,6 +33,7 @@ Extract when 3+ models need same behavior, not when 1 might. Add patterns when p
 - **External API integration?** → Service Layer (`app/services/`)
 - **Complex object construction?** → Builder Pattern (`app/business_logic/builders/`)
 - **Pure calculation (no side effects)?** → Pure Functions (`app/business_logic/calculations/`)
+- **Complex logic on model data?** → Value Objects (`app/models/[domain]/`)
 - **Single-model domain logic?** → Active Record (`app/models/`)
 - **Simple CRUD (build/save)?** → Transaction Script (Controllers)
 - **Complex query composition?** → Query Objects (`app/queries/`)
