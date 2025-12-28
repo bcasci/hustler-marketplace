@@ -1,0 +1,1 @@
+../../prompting_plugin/commands/optimize-prompt.md
