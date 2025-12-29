@@ -49,10 +49,10 @@ while IFS= read -r source_file; do
   front_matter=$(awk '/^---$/ {f++; next} f==1' "$source_file")
 
   # Parse dependencies array
-  file_deps=$(echo "$front_matter" | grep "^dependencies:" | sed 's/dependencies: \[//; s/\]//' | tr ',' '\n' | tr -d ' ' | grep -v '^$')
+  file_deps=$(echo "$front_matter" | grep "^dependencies:" | sed 's/dependencies: \[//; s/\]//' | tr ',' '\n' | tr -d ' ' | grep -v '^$' || true)
 
   # Parse examples array
-  file_examples=$(echo "$front_matter" | grep "^examples:" | sed 's/examples: \[//; s/\]//' | tr ',' '\n' | tr -d ' ' | grep -v '^$')
+  file_examples=$(echo "$front_matter" | grep "^examples:" | sed 's/examples: \[//; s/\]//' | tr ',' '\n' | tr -d ' ' | grep -v '^$' || true)
 
   # Check if dependencies are met
   deps_met=true
