@@ -32,6 +32,16 @@ if File.exist?('config/importmap.rb')
   deps += File.readlines('config/importmap.rb').map { |line| $1 if line =~ /pin ["']([^"']+)/ }.compact
 end
 
+# CDN assets from views
+view_files = Dir.glob('app/views/**/*.html.erb') + Dir.glob('app/views/**/*.html')
+view_files.each do |view_file|
+  content = File.read(view_file)
+  # Match CDN URLs and extract library names
+  # Patterns: unpkg.com/LIBRARY@, cdn.jsdelivr.net/npm/LIBRARY@, cdnjs.cloudflare.com/ajax/libs/LIBRARY/
+  cdn_libs = content.scan(%r{(?:unpkg\.com|cdn\.jsdelivr\.net/npm|cdnjs\.cloudflare\.com/ajax/libs)/([^@/\s"']+)}).flatten
+  deps += cdn_libs
+end
+
 # Normalize
 deps = deps.map(&:strip).map(&:downcase).uniq.reject(&:empty?)
 puts "Found #{deps.size} dependencies"

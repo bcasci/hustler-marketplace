@@ -30,6 +30,27 @@ domain/
 └── topics/*.md
 ```
 
+**Two-level hierarchy maximum:**
+
+```
+authorization/          # First-class topic gets directory
+├── conventions.md
+└── topics/
+    ├── pundit-policies.md
+    ├── pundit-controllers.md
+    └── pundit-views.md
+
+models/topics/
+└── discard-soft-delete.md  # Sub-topic: single comprehensive file
+```
+
+**NEVER create three-level hierarchies:**
+```
+❌ models/topics/soft-delete/
+   ├── concept.md
+   └── discard.md
+```
+
 ## Content Decision Tree
 
 Before adding/keeping content, ask these questions **in order**:
@@ -64,25 +85,22 @@ Compare:
 
 ## What to Keep vs Remove
 
-**KEEP:**
-- Architectural decisions (when to use Commands vs. controller logic)
-- Structure patterns (concern structure, controller patterns)
-- Cross-cutting requirements (all controllers must use Pundit)
-- Decision frameworks with criteria
-- "Do this / Don't do this" comparisons
-- When to break conventions
-- **Curated API patterns** - The subset we actually use
-- **Project integration patterns** - How gem integrates with our stack
-- **Convention guidance** - Our preferred methods/approaches
-- **Anti-patterns** - What NOT to use from the API
-
-**REMOVE:**
-- Method signatures for specific modules
-- API documentation for individual modules
-- Configuration tables for specific components
-- Comprehensive gem API documentation (copying gem docs)
-- Exhaustive option lists
-- Usage examples for ONE specific module
+| Content Type | Keep? | Example |
+|--------------|-------|---------|
+| Architectural decisions | ✅ | When to use Commands vs. controller logic |
+| Structure patterns | ✅ | Concern structure, controller patterns |
+| Cross-cutting requirements | ✅ | All controllers must use Pundit |
+| Decision frameworks | ✅ | Criteria for choosing approaches |
+| Do/Don't comparisons | ✅ | Pattern demonstrations |
+| When to break conventions | ✅ | Exception cases with rationale |
+| Curated API patterns | ✅ | The subset we actually use |
+| Project integration | ✅ | How gem integrates with our stack |
+| Anti-patterns | ✅ | What NOT to use from APIs |
+| Method signatures | ❌ | API docs for individual modules |
+| Configuration tables | ❌ | Specific component options |
+| Comprehensive gem docs | ❌ | Copying entire gem documentation |
+| Exhaustive option lists | ❌ | All possible parameters |
+| Single-module examples | ❌ | Usage for ONE specific module |
 
 ## Exception: Structural Scaffolds
 
@@ -98,9 +116,9 @@ UI construction (views, markup) requires reference structures because the patter
 
 Example: `.claude/rules/views/templates/index-pattern.html.erb` provides structure to copy. `.claude/rules/views/conventions.md` teaches WHEN to use it.
 
-## API Reference Examples
+## API Reference Pattern
 
-**Good:**
+**Good - Curated subset with project integration:**
 ```markdown
 # capybara-system-tests.md
 
@@ -119,7 +137,7 @@ fill_in 'Title', with: 'Album'
 - Rails helper usage (dom_id, file_fixture)
 ```
 
-**Bad:**
+**Bad - Comprehensive API documentation:**
 ```markdown
 # capybara-system-tests.md (BAD)
 
@@ -137,27 +155,6 @@ go_forward - Navigate forward
 - Split to topics/ when > 400 lines total
 - Remove redundant cross-references (same domain files load together)
 - Cross-domain refs: "Refer to project memory"
-
-**Two-level hierarchy maximum:**
-
-```
-authorization/          # First-class topic gets directory
-├── conventions.md
-└── topics/
-    ├── pundit-policies.md
-    ├── pundit-controllers.md
-    └── pundit-views.md
-
-models/topics/
-└── discard-soft-delete.md  # Sub-topic: single comprehensive file
-```
-
-**NEVER create three-level hierarchies:**
-```
-❌ models/topics/soft-delete/
-   ├── concept.md
-   └── discard.md
-```
 
 ## Philosophy vs Implementation Separation
 
@@ -204,8 +201,7 @@ Characteristics:
 
 Examples: `minitest-spec-structure.md`, `vcr-external-apis.md`, `discard-soft-delete.md`
 
-### Categories Requiring Flexibility
-
+**Categories requiring flexibility:**
 - Testing frameworks: Minitest vs RSpec
 - Test data: Fixtures vs FactoryBot vs builders
 - Assertions: Minitest assertions vs RSpec matchers
@@ -218,19 +214,9 @@ Examples: `minitest-spec-structure.md`, `vcr-external-apis.md`, `discard-soft-de
 
 ### Files Must Work Independently
 
-DO NOT assume other files are present:
-
-```markdown
-# ❌ BAD - Assumes VCR file exists
-Use VCR for external APIs (see vcr-external-apis.md for details)
-
-# ✅ GOOD - Works without VCR file
-Use recorded HTTP interactions for external API happy paths
-```
-
-### Cross-Reference Rules
-
 **Within same context (same directory) → NO cross-references:**
+
+Files in the same directory load together when their `paths:` patterns match. Cross-references are redundant.
 
 ```markdown
 # ❌ BAD in models/topics/associations.md
@@ -239,8 +225,6 @@ See discard-soft-delete.md for soft delete filtering
 # ✅ GOOD
 Filtering soft-deleted records with scoped associations
 ```
-
-All `models/topics/*.md` files load together when editing models. Cross-references are redundant.
 
 **Across different contexts → DO cross-reference:**
 
@@ -251,8 +235,6 @@ For authorization patterns, see authorization rules
 # ✅ GOOD in views/conventions.md
 For authorization in views, refer to project memory
 ```
-
-Controller rules don't auto-load with authorization rules. User needs pointer.
 
 ### Gem-Specific Files Are Comprehensive
 
