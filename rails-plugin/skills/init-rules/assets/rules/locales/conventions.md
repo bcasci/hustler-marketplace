@@ -1,5 +1,5 @@
 ---
-paths: config/locales/**/*.yml, app/views/**/*.erb
+paths: "config/locales/**/*.yml, app/views/**/*.erb"
 dependencies: []
 ---
 

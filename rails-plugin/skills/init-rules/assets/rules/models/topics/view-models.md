@@ -1,5 +1,5 @@
 ---
-paths: app/models/view_models/**/*.rb, app/views/**/*.erb
+paths: "app/models/view_models/**/*.rb, app/views/**/*.erb"
 dependencies: []
 ---
 

@@ -1,5 +1,5 @@
 ---
-paths: app/mailers/**/*.rb
+paths: "app/mailers/**/*.rb"
 dependencies: [passwordless]
 ---
 

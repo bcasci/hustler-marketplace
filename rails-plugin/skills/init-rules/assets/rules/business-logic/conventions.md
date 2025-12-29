@@ -1,5 +1,5 @@
 ---
-paths: app/business_logic/**/*.rb, app/models/**/*.rb
+paths: "app/business_logic/**/*.rb, app/models/**/*.rb"
 dependencies: []
 ---
 

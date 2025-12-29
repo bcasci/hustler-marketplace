@@ -1,5 +1,5 @@
 ---
-paths: test/system/**/*_test.rb
+paths: "test/system/**/*_test.rb"
 dependencies: [capybara]
 ---
 

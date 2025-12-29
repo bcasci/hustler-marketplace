@@ -1,5 +1,5 @@
 ---
-paths: config/database.yml, db/**/*.rb
+paths: "config/database.yml, db/**/*.rb"
 dependencies: [sqlite3]
 ---
 

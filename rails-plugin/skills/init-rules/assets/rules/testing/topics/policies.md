@@ -1,5 +1,5 @@
 ---
-paths: test/policies/**/*_test.rb
+paths: "test/policies/**/*_test.rb"
 dependencies: []
 ---
 

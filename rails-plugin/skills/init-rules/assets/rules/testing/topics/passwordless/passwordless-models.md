@@ -1,5 +1,5 @@
 ---
-paths: test/models/**/*.rb
+paths: "test/models/**/*.rb"
 dependencies: [passwordless]
 ---
 

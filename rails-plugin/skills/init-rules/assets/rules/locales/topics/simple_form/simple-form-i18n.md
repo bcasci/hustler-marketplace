@@ -1,5 +1,5 @@
 ---
-paths: config/locales/**/*.yml
+paths: "config/locales/**/*.yml"
 dependencies: [simple_form]
 ---
 

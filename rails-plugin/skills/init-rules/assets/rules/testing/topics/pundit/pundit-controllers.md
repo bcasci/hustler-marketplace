@@ -1,5 +1,5 @@
 ---
-paths: test/controllers/**/*.rb, test/integration/**/*.rb
+paths: "test/controllers/**/*.rb, test/integration/**/*.rb"
 dependencies: [pundit]
 ---
 

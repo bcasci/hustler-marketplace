@@ -1,5 +1,5 @@
 ---
-paths: test/controllers/**/*.rb
+paths: "test/controllers/**/*.rb"
 dependencies: [passwordless]
 ---
 

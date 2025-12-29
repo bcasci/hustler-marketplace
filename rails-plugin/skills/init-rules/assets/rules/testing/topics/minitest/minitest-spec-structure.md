@@ -1,5 +1,5 @@
 ---
-paths: test/**/*_test.rb
+paths: "test/**/*_test.rb"
 dependencies: [minitest-spec-rails]
 ---
 

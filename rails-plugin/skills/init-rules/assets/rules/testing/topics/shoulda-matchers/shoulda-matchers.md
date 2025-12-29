@@ -1,5 +1,5 @@
 ---
-paths: test/models/**/*_test.rb
+paths: "test/models/**/*_test.rb"
 dependencies: [shoulda-matchers]
 ---
 

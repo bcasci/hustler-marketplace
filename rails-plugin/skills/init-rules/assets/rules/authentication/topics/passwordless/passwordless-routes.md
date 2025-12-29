@@ -1,5 +1,5 @@
 ---
-paths: config/routes.rb
+paths: "config/routes.rb"
 dependencies: [passwordless]
 ---
 

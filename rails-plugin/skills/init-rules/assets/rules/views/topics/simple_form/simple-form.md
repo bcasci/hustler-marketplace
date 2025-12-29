@@ -1,5 +1,5 @@
 ---
-paths: app/views/**/*.erb
+paths: "app/views/**/*.erb"
 dependencies: [simple_form]
 examples: [simple_form]
 ---

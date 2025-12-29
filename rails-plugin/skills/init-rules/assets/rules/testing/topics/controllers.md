@@ -1,5 +1,5 @@
 ---
-paths: test/controllers/**/*_test.rb
+paths: "test/controllers/**/*_test.rb"
 dependencies: []
 ---
 

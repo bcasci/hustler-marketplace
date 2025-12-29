@@ -87,7 +87,10 @@ Dir.glob("#{rules_source}/**/*.md").reject { |f| f.end_with?('README.md') }.each
         skipped += 1
       end
     rescue => e
-      puts "⚠ Error parsing #{rel_path}: #{e.message}"
+      puts "⚠ YAML parsing error in #{rel_path}:"
+      puts "  #{e.message}"
+      puts "  Frontmatter preview:"
+      $1.lines.first(3).each { |line| puts "    #{line}" }
       skipped += 1
     end
   end

@@ -1,5 +1,5 @@
 ---
-paths: test/system/**/*.rb, test/views/**/*.rb
+paths: "test/system/**/*.rb, test/views/**/*.rb"
 dependencies: [pundit]
 ---
 

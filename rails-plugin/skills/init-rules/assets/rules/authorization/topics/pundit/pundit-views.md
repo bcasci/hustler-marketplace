@@ -1,5 +1,5 @@
 ---
-paths: app/views/**/*.erb, app/views/**/*.rb
+paths: "app/views/**/*.erb, app/views/**/*.rb"
 dependencies: [pundit]
 ---
 

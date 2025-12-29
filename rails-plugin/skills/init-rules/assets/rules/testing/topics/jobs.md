@@ -1,5 +1,5 @@
 ---
-paths: test/jobs/**/*_test.rb
+paths: "test/jobs/**/*_test.rb"
 dependencies: []
 ---
 

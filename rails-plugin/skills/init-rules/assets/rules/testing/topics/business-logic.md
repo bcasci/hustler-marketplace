@@ -1,5 +1,5 @@
 ---
-paths: test/business_logic/**/*_test.rb
+paths: "test/business_logic/**/*_test.rb"
 dependencies: []
 ---
 

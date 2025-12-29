@@ -1,5 +1,5 @@
 ---
-paths: db/**/*.{rb,sql}
+paths: "db/**/*.{rb,sql}"
 dependencies: [sqlite3]
 ---
 
