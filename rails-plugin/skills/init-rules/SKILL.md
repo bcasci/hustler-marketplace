@@ -47,7 +47,7 @@ Handle response:
 Execute:
 
 ```bash
-bash {baseDir}/scripts/init-rules.sh {baseDir}
+ruby {baseDir}/scripts/init-rules.rb {baseDir}
 ```
 
 ## Step 3: Show Results
